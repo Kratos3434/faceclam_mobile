@@ -31,7 +31,8 @@ const Profile = ({ navigation }: { navigation: any }) => {
   });
 
   return (
-    <View style={styles.AndroidSafeArea}>
+    <SafeAreaView style={styles.AndroidSafeArea}>
+      
       {
         query.status === 'pending' ?
           (
@@ -66,7 +67,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
             </>
           )
       }
-    </View>
+    </SafeAreaView>
   )
 }
 
