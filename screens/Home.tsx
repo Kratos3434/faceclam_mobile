@@ -9,6 +9,7 @@ import { useAtom } from "jotai";
 import { currentUserAtom } from "../store";
 import WhatsOnYourMind from "../components/WhatsOnYourMind";
 import { useState, useCallback } from "react";
+import { StatusBar } from "react-native";
 
 const Home = ({ navigation }: { navigation: any }) => {
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
@@ -40,33 +41,35 @@ const Home = ({ navigation }: { navigation: any }) => {
 
   return (
     <SafeAreaView style={styles.AndroidSafeArea}>
-      {/* <StatusBar backgroundColor='white' /> */}
+      <StatusBar barStyle='dark-content' />
       <View style={{ paddingHorizontal: 16, backgroundColor: 'white' }}>
         <Text style={{ fontWeight: 'bold', color: '#0866FF', fontSize: 30 }}>faceclam</Text>
       </View>
-      <ScrollView style={{ paddingVertical: 0 }} 
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-        { currentUser && <WhatsOnYourMind user={currentUser} />}
-        {
-          query.status === 'pending' ?
-            (
-              <ActivityIndicator size={70} />
-            ) :
-            (
-              query.data?.map((e, idx) => {
-                return (
-                  <Fragment key={idx}>
-                    <Card post={e} navigation={navigation} />
-                  </Fragment>
-                );
-              })
-            )
-        }
+      <ScrollView style={{ paddingVertical: 0 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
+        {currentUser && <WhatsOnYourMind user={currentUser} />}
+        <View style={{backgroundColor: '#D3D3D3'}}>
+          {
+            query.status === 'pending' ?
+              (
+                <ActivityIndicator size={70} />
+              ) :
+              (
+                query.data?.map((e, idx) => {
+                  return (
+                    <Fragment key={idx}>
+                      <Card post={e} navigation={navigation} />
+                    </Fragment>
+                  );
+                })
+              )
+          }
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
 }
-
+// #D3D3D3
 export default Home;

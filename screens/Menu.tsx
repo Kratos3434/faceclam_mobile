@@ -7,7 +7,7 @@ const Menu = () => {
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
 
   return (
-    <SafeAreaView style={styles.AndroidSafeArea}>
+    <SafeAreaView style={styles.MenuSafeArea}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, marginBottom: 10}}>
         <Text style={{color: 'black', fontWeight: 'bold', fontSize: 25}}>Menu</Text>
       </View>
