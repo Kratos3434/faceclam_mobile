@@ -87,6 +87,7 @@ const Home = ({ navigation }: { navigation: any }) => {
             query.isSuccess &&
             (
               <FlatList
+                showsVerticalScrollIndicator={false}
                 style={{backgroundColor: '#E4E5E7'}}
                 data={query.data?.pages}
                 renderItem={({ item }) => {
