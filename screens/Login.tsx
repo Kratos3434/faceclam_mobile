@@ -3,10 +3,11 @@ import { styles } from "../styles";
 import { useRef, useState } from "react";
 import { FontAwesome } from '@expo/vector-icons';
 import { useAtom } from "jotai";
-import { loginAtom } from "../store";
+import { currentUserAtom, loginAtom } from "../store";
 import * as SecureStore from 'expo-secure-store';
 import MyModal from "../components/MyModal";
 import { publicBaseURL } from "../env";
+import { userBaseURL } from "../env";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -16,9 +17,23 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const [eye, setEye] = useState<any>("eye-slash");
   const [loggedIn, isLoggedIn] = useAtom(loginAtom);
+  const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
 
   // const emailRef = useRef(null);
   const passwordRef: any = useRef(null);
+
+  const getCurrentUser = async (token: string) => {
+    const res = await fetch(`${userBaseURL}/current`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    const data = await res.json();
+    return data.data;
+  }
 
   const handleLogin = async () => {
     if (!email) {
@@ -46,6 +61,7 @@ const Login = () => {
       if (data.status) {
         if (token) {
           await SecureStore.setItemAsync('token', token);
+          setCurrentUser(await getCurrentUser(token));
           isLoggedIn(true);
         } else {
           setError(data.error);

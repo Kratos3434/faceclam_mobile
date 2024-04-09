@@ -1,35 +1,62 @@
-import { ActivityIndicator, RefreshControl, SafeAreaView, ScrollView, Text, View } from "react-native";
-import { styles } from "../styles";
+import { ActivityIndicator, FlatList, Platform, RefreshControl, SafeAreaView, ScrollView, Text, TouchableHighlight, View } from "react-native";
 import Card from "../components/Card";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { publicBaseURL } from "../env";
 import { PostProps } from "../types";
-import { Fragment } from "react";
+import { Fragment, useRef } from "react";
 import { useAtom } from "jotai";
-import { currentUserAtom } from "../store";
+import { currentUserAtom, lastCreatedAtom } from "../store";
 import WhatsOnYourMind from "../components/WhatsOnYourMind";
 import { useState, useCallback } from "react";
 import { StatusBar } from "react-native";
+import { styles } from "../styles";
 
 const Home = ({ navigation }: { navigation: any }) => {
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
   const [refreshing, setRefreshing] = useState(false);
   const queryClient = useQueryClient();
+  const [lastCreated, setLastCreated] = useAtom(lastCreatedAtom);
 
-  const getPosts = async (): Promise<PostProps[]> => {
-    const res = await fetch(`${publicBaseURL}/post/limit?limit=${20}`);
+  const limit = 5;
+
+  const getPosts = async ({ pageParam }: { pageParam: string }): Promise<{
+    data: PostProps[],
+    currentPage: string,
+    nextPage: string | null
+  }> => {
+    let fetchSum = "";
+
+    if (!pageParam) {
+      fetchSum = `${publicBaseURL}/post/limit?limit=${limit}`;
+    } else {
+      fetchSum = `${publicBaseURL}/post/limit?limit=${limit}&lastCreatedAt=${lastCreated}`
+    }
+
+    const res = await fetch(fetchSum);
     const data = await res.json();
-    return data.data;
+    if (data.data.length == limit) {
+      setLastCreated(data.data[data.data.length - 1].createdAt);
+    } else {
+      setLastCreated(null);
+    }
+
+    return {
+      data: data.data,
+      currentPage: pageParam,
+      nextPage: data.data.length === limit ? data.data[data.data.length - 1].createdAt : null
+    }
   }
 
-  const query = useQuery({
+  const query = useInfiniteQuery({
     queryKey: ['posts'],
-    queryFn: getPosts
-  });
+    queryFn: getPosts,
+    initialPageParam: "",
+    getNextPageParam: (lastPage) => lastPage.nextPage
+  })
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    queryClient.invalidateQueries({
+    await queryClient.invalidateQueries({
       queryKey: ['posts'],
       exact: true
     });
@@ -39,35 +66,46 @@ const Home = ({ navigation }: { navigation: any }) => {
     }, 2000);
   }, []);
 
+  const loadMore = () => {
+    if (query.hasNextPage && !query.isFetchingNextPage) {
+      query.fetchNextPage();
+    }
+  }
+
   return (
     <SafeAreaView style={styles.AndroidSafeArea}>
-      <StatusBar barStyle='dark-content' />
+      <StatusBar barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'} />
       <View style={{ paddingHorizontal: 16, backgroundColor: 'white' }}>
         <Text style={{ fontWeight: 'bold', color: '#0866FF', fontSize: 30 }}>faceclam</Text>
       </View>
-      <ScrollView style={{ paddingVertical: 0 }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }>
-        {currentUser && <WhatsOnYourMind user={currentUser} />}
-        <View style={{backgroundColor: '#D3D3D3'}}>
-          {
-            query.status === 'pending' ?
-              (
-                <ActivityIndicator size={70} />
-              ) :
-              (
-                query.data?.map((e, idx) => {
+      {
+        query.isPending ?
+          (
+            <ActivityIndicator size={70} />
+          ) :
+          (
+            query.isSuccess &&
+            (
+              <FlatList
+                style={{backgroundColor: '#E4E5E7'}}
+                data={query.data?.pages}
+                renderItem={({ item }) => {
+                  return <FlatList data={item.data} renderItem={({ item }) => { return <Card post={item} navigation={navigation} /> }} />
+                }}
+                ListFooterComponent={() => {
                   return (
-                    <Fragment key={idx}>
-                      <Card post={e} navigation={navigation} />
-                    </Fragment>
-                  );
-                })
-              )
-          }
-        </View>
-      </ScrollView>
+                    query.hasNextPage ? <ActivityIndicator style={{ paddingVertical: 5 }} size={20} /> : <Text style={{textAlign: 'center', marginVertical: 5}}>You are updated :{")"}</Text>
+                  )
+                }}
+                refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+                ListHeaderComponent={() => { return currentUser && <WhatsOnYourMind user={currentUser} /> }}
+                onEndReached={loadMore}
+              />
+            )
+          )
+      }
     </SafeAreaView>
   )
 }

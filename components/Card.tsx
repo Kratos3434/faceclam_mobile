@@ -20,7 +20,7 @@ const Card = ({ post, navigation }: Props) => {
   }
 
   return (
-    <View style={{ backgroundColor: 'white', display: 'flex', paddingVertical: 8, marginBottom: 5 }}>
+    <View style={{ backgroundColor: 'white', display: 'flex', paddingTop: 8, marginBottom: 5 }}>
       <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           <TouchableOpacity onPress={goToProfile}>
@@ -46,18 +46,6 @@ const Card = ({ post, navigation }: Props) => {
       <Text style={{ paddingHorizontal: 16, fontSize: 13, marginVertical: 3 }}>{post.description}</Text>
       {/**Description */}
       {/**Image */}
-      {/* {
-        post.featureImage &&
-        (
-          post.featureImage.substring(post.featureImage.lastIndexOf('.')) === '.mp4' ?
-          (
-            <Video source={{uri: `https${post.featureImage.substring(post.featureImage.indexOf(':'))}`}} />
-          ):
-          (
-            <Image source={{ uri: post.featureImage }} height={500} />
-          )
-        )
-      } */}
       <SharableContent post={post} navigation={navigation} />
       {/**Image */}
       <View style={{ display: 'flex', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 5 }}>
@@ -80,7 +68,7 @@ const Card = ({ post, navigation }: Props) => {
           marginHorizontal: 16
         }}
       />
-      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, alignItems: 'center', marginVertical: 5 }}>
+      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 16, alignItems: 'center', marginVertical: 8 }}>
         <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
           <AntDesign name="like2" size={20} color="black" />
           <Text style={{ color: 'gray', fontSize: 13 }}>Like</Text>

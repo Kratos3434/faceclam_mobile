@@ -15,7 +15,7 @@ const SharableContent = ({ post, navigation }: Props) => {
   const [selectedProfile, setSelectedProfile] = useAtom(selectedProfileAtom);
 
   const goToProfile = () => {
-    setSelectedProfile(`${post.author.firstName}.${post.author.lastName}.${post.author.id}`);
+    setSelectedProfile(`${post.content?.author.firstName}.${post.content?.author.lastName}.${post.content?.author.id}`);
     navigation.push('Profile');
   }
 
@@ -34,7 +34,7 @@ const SharableContent = ({ post, navigation }: Props) => {
         )
       ) :
       (
-        <View style={{marginHorizontal: 16, borderWidth: .90, borderColor: 'gray', paddingVertical: 5}}>
+        <View style={{marginHorizontal: 16, borderWidth: .90, borderColor: 'gray', paddingVertical: 5, borderRadius: 8}}>
           <View style={{paddingHorizontal: 16, display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 5}}>
             <TouchableOpacity onPress={goToProfile}>
               <Image source={{uri: post.content.author.profilePicture}} width={25} height={25} style={{borderRadius: 1000}} />

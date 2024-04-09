@@ -44,9 +44,23 @@ export default function App() {
       // await SecureStore.deleteItemAsync('token')
       const token = await SecureStore.getItemAsync('token');
       if (token) {
-        setCurrentUser(await getCurrentUser(token));
-        isLoading(false);
-        isLoggedIn(true);
+        const val = await fetch(`${userBaseURL}/authenticate`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        if (val.status === 401) {
+          isLoading(false)
+          isLoggedIn(false);
+        } else {
+          if (!currentUser) {
+            setCurrentUser(await getCurrentUser(token));
+          }
+          isLoading(false);
+          isLoggedIn(true);
+        }
       } else {
         isLoading(false)
         isLoggedIn(false);
@@ -68,16 +82,16 @@ export default function App() {
               <Tab.Navigator screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
                   switch (route.name) {
-                    case 'HomeStack':
+                    case 'Home':
                       return <Feather name='home' size={size} color={color} />;
                     case 'Menu':
-                      return <Image source={{uri: currentUser?.profilePicture}} width={25} height={25} style={{borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white'}} />
+                      return <Image source={{ uri: currentUser?.profilePicture }} width={25} height={25} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
                   }
 
                 }
               })}>
-                <Tab.Screen name='HomeStack' component={HomeStackScreen} options={{ headerShown: false }} />
-                <Tab.Screen name='Menu' component={Menu} options={{headerShown: false}} />
+                <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false }} />
+                <Tab.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
               </Tab.Navigator>
             </NavigationContainer>
           ) :
@@ -92,8 +106,8 @@ export default function App() {
 const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen name='Home' component={Home} options={{ headerShown: false }} />
-      <HomeStack.Screen name='Profile' component={Profile} options={{headerShown: false, animation: 'slide_from_right'}} />
+      <HomeStack.Screen name='HomeScreen' component={Home} options={{ headerShown: false }} />
+      <HomeStack.Screen name='Profile' component={Profile} options={{ headerShown: false, animation: 'slide_from_right' }} />
     </HomeStack.Navigator>
   )
 }

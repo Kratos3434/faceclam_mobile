@@ -4,7 +4,7 @@ export const styles = StyleSheet.create({
   AndroidSafeArea: {
     flex: 1,
     backgroundColor: 'white',
-    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    // marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   LoginSafeArea: {
     flex: 1,
