@@ -24,7 +24,7 @@ const Card = ({ post, navigation }: Props) => {
       <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }}>
           <TouchableOpacity onPress={goToProfile}>
-            <Image source={{ uri: post.author.profilePicture }} width={35} height={35} style={{ borderRadius: 1000 }} />
+            <Image source={post.author.profilePicture ? { uri: post.author.profilePicture } : require('../assets/placeholder.png')} width={35} height={35} style={{ borderRadius: 1000, width: 35, height: 35 }} />
           </TouchableOpacity>
           <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <TouchableOpacity onPress={goToProfile}>

@@ -4,7 +4,7 @@ import Home from './screens/Home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import Login from './screens/Login';
 import { useAtom } from 'jotai';
@@ -13,8 +13,9 @@ import { ActivityIndicator, Image } from 'react-native';
 import { userBaseURL } from './env';
 import Menu from './screens/Menu';
 import Profile from './screens/Profile';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import RespondBottomSheet from './components/RespondBottomSheet';
 
-const Stack = createNativeStackNavigator();
 const HomeStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -73,32 +74,37 @@ export default function App() {
   if (loading) {
     return <ActivityIndicator size={70} />
   }
+
   return (
     <QueryClientProvider client={queryClient}>
-      {
-        loggedIn ?
-          (
-            <NavigationContainer>
-              <Tab.Navigator screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
-                  switch (route.name) {
-                    case 'Home':
-                      return <Feather name='home' size={size} color={color} />;
-                    case 'Menu':
-                      return <Image source={{ uri: currentUser?.profilePicture }} width={25} height={25} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
-                  }
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        {
+          loggedIn ?
+            (
+              <NavigationContainer>
+                <Tab.Navigator screenOptions={({ route }) => ({
+                  tabBarIcon: ({ focused, color, size }) => {
+                    switch (route.name) {
+                      case 'Home':
+                        return <Feather name='home' size={size} color={color} />;
+                      case 'Menu':
+                        return <Image source={{ uri: currentUser?.profilePicture }} width={25} height={25} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
+                    }
 
-                }
-              })}>
-                <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false }} />
-                <Tab.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
-              </Tab.Navigator>
-            </NavigationContainer>
-          ) :
-          (
-            <Login />
-          )
-      }
+                  }
+                })}>
+                  <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false }} />
+                  <Tab.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
+                </Tab.Navigator>
+              </NavigationContainer>
+            ) :
+            (
+              <Login />
+            )
+        }
+        {/** This is opened when pressing respond button */}
+        <RespondBottomSheet />
+      </GestureHandlerRootView>
     </QueryClientProvider>
   );
 }
