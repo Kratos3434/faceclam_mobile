@@ -1,9 +1,8 @@
-import { ActivityIndicator, FlatList, Platform, RefreshControl, SafeAreaView, ScrollView, Text, TouchableHighlight, View } from "react-native";
+import { ActivityIndicator, FlatList, Platform, RefreshControl, SafeAreaView, Text, View } from "react-native";
 import Card from "../components/Card";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { publicBaseURL } from "../env";
 import { PostProps } from "../types";
-import { Fragment, useRef } from "react";
 import { useAtom } from "jotai";
 import { currentUserAtom, lastCreatedAtom } from "../store";
 import WhatsOnYourMind from "../components/WhatsOnYourMind";
@@ -61,9 +60,7 @@ const Home = ({ navigation }: { navigation: any }) => {
       exact: true
     });
 
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
+    setRefreshing(false);
   }, []);
 
   const loadMore = () => {
@@ -101,7 +98,7 @@ const Home = ({ navigation }: { navigation: any }) => {
                 refreshControl={
                   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
-                ListHeaderComponent={() => { return currentUser && <WhatsOnYourMind user={currentUser} /> }}
+                ListHeaderComponent={() => { return currentUser && <WhatsOnYourMind user={currentUser} navigation={navigation} /> }}
                 onEndReached={loadMore}
               />
             )

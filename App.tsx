@@ -12,12 +12,15 @@ import { currentUserAtom, loginAtom } from './store';
 import { ActivityIndicator, Image } from 'react-native';
 import { userBaseURL } from './env';
 import Menu from './screens/Menu';
-import Profile from './screens/Profile';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import RespondBottomSheet from './components/RespondBottomSheet';
+import Posts from './screens/Posts';
+import Photos from './screens/Photos';
+import CreateStatus from './screens/CreateStatus';
 
 const HomeStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const ProfileStack = createNativeStackNavigator();
 
 const queryClient = new QueryClient();
 
@@ -93,7 +96,7 @@ export default function App() {
 
                   }
                 })}>
-                  <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false }} />
+                  <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false, tabBarHideOnKeyboard: true }} />
                   <Tab.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
                 </Tab.Navigator>
               </NavigationContainer>
@@ -113,7 +116,19 @@ const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name='HomeScreen' component={Home} options={{ headerShown: false }} />
-      <HomeStack.Screen name='Profile' component={Profile} options={{ headerShown: false, animation: 'slide_from_right' }} />
+      {/* <HomeStack.Screen name='Profile' component={Profile} options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
+      <HomeStack.Screen name='Profile' component={ProfileStackScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
+      <HomeStack.Screen name='CreateStatus' component={CreateStatus} options={{headerShown: false, animation: 'slide_from_bottom'}} />
     </HomeStack.Navigator>
+  )
+}
+
+
+const ProfileStackScreen = () => {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name='Posts' component={Posts} options={{headerShown: false, animation: 'none'}} />
+      <ProfileStack.Screen name='Photos' component={Photos} options={{headerShown: false, animation: 'none'}} />
+    </ProfileStack.Navigator>
   )
 }
