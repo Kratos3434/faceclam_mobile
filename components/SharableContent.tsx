@@ -52,6 +52,9 @@ const SharableContent = ({ post, navigation }: Props) => {
               </Text>
             </View>
           </View>
+          <Text style={{paddingHorizontal: 16, fontSize: 13, marginBottom: 3}}>
+            {post.content.description}
+          </Text>
           {
             post.content.featureImage &&
             (

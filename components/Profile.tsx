@@ -4,10 +4,11 @@ import { Ionicons } from '@expo/vector-icons'
 
 interface Props {
   user: UserProps,
-  navigation: any
+  navigation: any,
+  children: React.ReactNode
 }
 
-const Profile = ({ user, navigation }: Props) => {
+const Profile = ({ user, navigation, children }: Props) => {
   return (
     <>
       <View style={{ backgroundColor: 'white', flexDirection: 'row', paddingVertical: 10, alignItems: 'center', position: 'relative', justifyContent: 'center' }}>
@@ -21,7 +22,7 @@ const Profile = ({ user, navigation }: Props) => {
       <ScrollView style={{ flex: 1 }}>
         <Image source={{ uri: user.coverPicture }} height={200} resizeMode="stretch" />
         {/* <Image source={{uri: query.data?.profilePicture}} width={100} height={100} style={{borderRadius: 1000, position: 'absolute', bottom: -50}} /> */}
-        <View style={{ paddingHorizontal: 16, backgroundColor: 'white', position: 'relative' }}>
+        <View style={{ paddingHorizontal: 16, backgroundColor: 'white' }}>
           <Image source={{ uri:user.profilePicture }} width={120} height={120} style={{ borderRadius: 1000, position: 'absolute', bottom: 50, left: 8, borderWidth: 3, borderColor: 'white' }} />
           <View style={{ paddingTop: 25 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10 }}>
@@ -33,6 +34,7 @@ const Profile = ({ user, navigation }: Props) => {
             </View>
           </View>
         </View>
+        {children}
       </ScrollView>
     </>
   )
