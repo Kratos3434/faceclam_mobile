@@ -12,7 +12,7 @@ interface Props {
 const Friends = ({ friends, currentId, navigation }: Props) => {
   // console.log(currentId)
   return (
-    <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: friends.length < 3 ? 'center' : 'space-between', alignItems: 'center', gap: 10, marginVertical: 15}}>
+    <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: friends.length < 3 ? 'flex-start' : 'space-between', alignItems: 'center', gap: 10, marginVertical: 15}}>
       {
         friends.map((e, idx) => {
           return (
