@@ -5,11 +5,12 @@ import { Fragment } from "react";
 
 interface Props {
   friends: FriendProps[],
-  currentId?: number
+  currentId?: number,
+  navigation: any
 }
 
-const Friends = ({ friends, currentId }: Props) => {
-  console.log(currentId)
+const Friends = ({ friends, currentId, navigation }: Props) => {
+  // console.log(currentId)
   return (
     <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: friends.length < 3 ? 'center' : 'space-between', alignItems: 'center', gap: 10, marginVertical: 15}}>
       {
@@ -18,12 +19,12 @@ const Friends = ({ friends, currentId }: Props) => {
             e.user.id === currentId ?
             (
               <Fragment key={idx}>
-                <FriendsCard user={e.friend} />
+                <FriendsCard user={e.friend} navigation={navigation} />
               </Fragment>
             ):
             (
               <Fragment key={idx}>
-                <FriendsCard user={e.user} />
+                <FriendsCard user={e.user} navigation={navigation} />
               </Fragment>
             )
           )

@@ -17,6 +17,8 @@ import RespondBottomSheet from './components/RespondBottomSheet';
 import Posts from './screens/Posts';
 import Photos from './screens/Photos';
 import CreateStatus from './screens/CreateStatus';
+import AddPost from './screens/AddPost';
+import Post from './screens/Post';
 
 const HomeStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -119,6 +121,8 @@ const HomeStackScreen = () => {
       {/* <HomeStack.Screen name='Profile' component={Profile} options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
       <HomeStack.Screen name='Profile' component={ProfileStackScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
       <HomeStack.Screen name='CreateStatus' component={CreateStatus} options={{headerShown: false, animation: 'slide_from_bottom'}} />
+      <HomeStack.Screen name='AddPost' component={AddPost} options={{headerShown: false, animation: 'slide_from_bottom'}} />
+      <HomeStack.Screen name='Post' component={Post} options={{headerShown: false, animation: 'slide_from_right'}} />
     </HomeStack.Navigator>
   )
 }

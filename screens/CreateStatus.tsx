@@ -1,4 +1,4 @@
-import { Image, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Image, SafeAreaView, ScrollView, Text, TextInput, TouchableHighlight, TouchableOpacity, View } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { useAtom } from "jotai";
 import { currentUserAtom } from "../store";
@@ -56,7 +56,7 @@ const CreateStatus = ({ navigation }: Props) => {
       {/** Show any error message */}
       <ErrorModal isVisible={error ? true : false} errorMessage={error} handleClose={() => setError("")} />
       {/** END */}
-      <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#D3D3D3'}}>
+      <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', position: 'relative', paddingHorizontal: 16, paddingVertical: 12, backgroundColor: '#E4E5E7'}}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{position: 'absolute', left: 16}}>
           <AntDesign name="close" size={24} color="black" />
         </TouchableOpacity>
