@@ -1,10 +1,9 @@
-import { View, TouchableOpacity, Text, Image, ScrollView, ActivityIndicator, RefreshControl, TouchableHighlight, Modal, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Text, Image, ScrollView, ActivityIndicator, RefreshControl, TouchableHighlight, Modal } from "react-native";
 import { UserProps } from "../types";
 import { Ionicons, Feather, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import { useState, useCallback } from "react";
-// import BottomSheet, { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { useAtom } from "jotai";
-import { respondBottomSheetIndexAtom, userIdAtom, selectedProfileAtom } from "../store";
+import { respondBottomSheetIndexAtom, selectedProfileAtom, userIdAtom } from "../store";
 import { useQueryClient } from "@tanstack/react-query";
 import { userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
@@ -14,28 +13,30 @@ interface Props {
   user: UserProps,
   navigation: any,
   currentUser: UserProps | null,
-  children: React.ReactNode
+  children: React.ReactNode,
+  name: any
 }
 
-const OtherProfile = ({ user, navigation, currentUser, children }: Props) => {
+const OtherProfile = ({ user, navigation, currentUser, children, name }: Props) => {
   const [loading, setLoading] = useState(false);
   const [respondBottomSheetIndex, setRespondBottomSheetIndex] = useAtom(respondBottomSheetIndexAtom);
+  const [selectedProfile, setSelectedProfile] = useAtom(selectedProfileAtom);
   const [userId, setUserId] = useAtom(userIdAtom);
   const [refreshing, setRefreshing] = useState(false);
   const queryClient = useQueryClient();
-  const [selectedProfile, setSelectedProfile] = useAtom(selectedProfileAtom);
   const [showModal, setShowModal] = useState(false);
   const [cancelling, isCancelling] = useState(false);
 
   const handleModalSheetOpen = () => {
     setRespondBottomSheetIndex(0);
+    setSelectedProfile(name);
     setUserId(user.id)
   };
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
     await queryClient.invalidateQueries({
-      queryKey: ['user', selectedProfile],
+      queryKey: ['user', name],
       exact: true
     });
 
@@ -56,7 +57,7 @@ const OtherProfile = ({ user, navigation, currentUser, children }: Props) => {
 
     if (data.status) {
       await queryClient.invalidateQueries({
-        queryKey: ['user', selectedProfile],
+        queryKey: ['user', name],
         exact: true
       });
 
@@ -80,7 +81,7 @@ const OtherProfile = ({ user, navigation, currentUser, children }: Props) => {
 
     if (data.status) {
       await queryClient.invalidateQueries({
-        queryKey: ['user', selectedProfile],
+        queryKey: ['user', name],
         exact: true
       });
       setShowModal(false);

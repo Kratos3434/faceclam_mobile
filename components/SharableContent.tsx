@@ -1,10 +1,7 @@
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { PostProps } from "../types";
 import { generateDate } from "../helpers";
-import { Video, ResizeMode, Audio } from 'expo-av';
-import { useAtom } from "jotai";
-import { selectedProfileAtom } from "../store";
-import { useEffect } from "react";
+import { Video, ResizeMode } from 'expo-av';
 // import Video from "react-native-video";
 
 interface Props {
@@ -13,11 +10,12 @@ interface Props {
 }
 
 const SharableContent = ({ post, navigation }: Props) => {
-  const [selectedProfile, setSelectedProfile] = useAtom(selectedProfileAtom);
 
   const goToProfile = () => {
-    setSelectedProfile(`${post.content?.author.firstName}.${post.content?.author.lastName}.${post.content?.author.id}`);
-    navigation.push('Profile');
+    navigation.push('Profile', {
+      screen: 'Posts',
+      params: {name: `${post.content?.author.firstName}.${post.content?.author.lastName}.${post.content?.author.id}`}
+    });
   }
 
   return (

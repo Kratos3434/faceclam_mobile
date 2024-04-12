@@ -1,7 +1,7 @@
-import { SafeAreaView, Text, ActivityIndicator, View, ScrollView, StyleSheet, TouchableHighlight } from "react-native";
+import { SafeAreaView, Text, ActivityIndicator, View, TouchableHighlight } from "react-native";
 import { styles } from "../styles";
 import { useAtom } from "jotai";
-import { currentUserAtom, selectedProfileAtom, userProfileAtom } from "../store";
+import { currentUserAtom } from "../store";
 import { useQuery } from "@tanstack/react-query";
 import { publicBaseURL, userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
@@ -11,14 +11,13 @@ import OtherProfile from "../components/OtherProfile";
 import React from "react";
 import { useRoute } from "@react-navigation/native";
 
-const ProfileLayout = ({ navigation, children, setUser }: { navigation: any, children: React.ReactNode, setUser: any }) => {
-  const [selectedProfile, setSelectedProfile] = useAtom(selectedProfileAtom);
+const ProfileLayout = ({ navigation, children, setUser, name }: { navigation: any, children: React.ReactNode, setUser: any, name: any }) => {
   const [currentUser, getCurrentUser] = useAtom(currentUserAtom);
-  const [profileUser, setProfileUser] = useAtom(userProfileAtom)
+
   const route = useRoute();
 
   const getUser = async (): Promise<UserProps> => {
-    const res = await fetch(`${publicBaseURL}/user/${selectedProfile}`, {
+    const res = await fetch(`${publicBaseURL}/user/${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -32,7 +31,7 @@ const ProfileLayout = ({ navigation, children, setUser }: { navigation: any, chi
   }
 
   const validateCurrent = async (): Promise<boolean> => {
-    const res = await fetch(`${userBaseURL}/validate/current/${selectedProfile}`, {
+    const res = await fetch(`${userBaseURL}/validate/current/${name}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -45,13 +44,13 @@ const ProfileLayout = ({ navigation, children, setUser }: { navigation: any, chi
   }
 
   const query = useQuery({
-    queryKey: ['user', selectedProfile],
+    queryKey: ['user', name],
     queryFn: getUser,
     staleTime: Infinity
   });
 
   const validate = useQuery({
-    queryKey: ['validate', selectedProfile],
+    queryKey: ['validate', name],
     queryFn: validateCurrent,
     staleTime: Infinity
   });
@@ -73,11 +72,17 @@ const ProfileLayout = ({ navigation, children, setUser }: { navigation: any, chi
                   <View style={{ backgroundColor: '#E4E5E7', paddingVertical: 5 }}>
                     <View style={{ backgroundColor: 'white', paddingVertical: 10 }}>
                       <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 10, borderBottomWidth: 0.5, paddingBottom: 5 }}>
-                        <TouchableHighlight style={{ backgroundColor: '#CDE0EA', borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Posts')} activeOpacity={0.6} underlayColor="#DDDDDD" >
-                          <Text style={{ color: 'blue' }}>Posts</Text>
+                        <TouchableHighlight style={{ backgroundColor: route.name === 'Posts' ? '#CDE0EA' : undefined, borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Profile', {
+                          screen: 'Posts',
+                          params: { name }
+                        })} activeOpacity={0.6} underlayColor="#DDDDDD" >
+                          <Text style={{ color: route.name === 'Posts' ? 'blue' : 'black' }}>Posts</Text>
                         </TouchableHighlight>
-                        <TouchableHighlight style={{ backgroundColor: '#CDE0EA', borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Photos')} activeOpacity={0.6} underlayColor="#DDDDDD" >
-                          <Text style={{ color: 'blue' }}>Photos</Text>
+                        <TouchableHighlight style={{ backgroundColor: route.name === 'Photos' ? '#CDE0EA' : undefined, borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Profile', {
+                          screen: 'Photos',
+                          params: { name }
+                        })} activeOpacity={0.6} underlayColor="#DDDDDD" >
+                          <Text style={{ color: route.name === 'Photos' ? 'blue' : 'black' }}>Photos</Text>
                         </TouchableHighlight>
                       </View>
                       {children}
@@ -86,14 +91,20 @@ const ProfileLayout = ({ navigation, children, setUser }: { navigation: any, chi
                 </Profile>
                 ) :
                 (
-                  <OtherProfile user={query.data} navigation={navigation} currentUser={currentUser}>
+                  <OtherProfile user={query.data} navigation={navigation} currentUser={currentUser} name={name}>
                     <View style={{ backgroundColor: '#E4E5E7', paddingVertical: 5 }}>
                       <View style={{ backgroundColor: 'white', paddingVertical: 10 }}>
                         <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 10, borderBottomWidth: 0.5, paddingBottom: 5 }}>
-                          <TouchableHighlight style={{ backgroundColor: route.name === 'Posts' ? '#CDE0EA' : undefined, borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Posts')} activeOpacity={0.6} underlayColor="#DDDDDD" >
+                          <TouchableHighlight style={{ backgroundColor: route.name === 'Posts' ? '#CDE0EA' : undefined, borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Profile', {
+                            screen: 'Posts',
+                            params: { name }
+                          })} activeOpacity={0.6} underlayColor="#DDDDDD" >
                             <Text style={{ color: route.name === 'Posts' ? 'blue' : 'black' }}>Posts</Text>
                           </TouchableHighlight>
-                          <TouchableHighlight style={{ backgroundColor: route.name === 'Photos' ? '#CDE0EA' : undefined, borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Photos')} activeOpacity={0.6} underlayColor="#DDDDDD" >
+                          <TouchableHighlight style={{ backgroundColor: route.name === 'Photos' ? '#CDE0EA' : undefined, borderRadius: 100, paddingHorizontal: 7, paddingVertical: 5 }} onPress={() => navigation.navigate('Profile', {
+                            screen: 'Photos',
+                            params: { name }
+                          })} activeOpacity={0.6} underlayColor="#DDDDDD" >
                             <Text style={{ color: route.name === 'Photos' ? 'blue' : 'black' }}>Photos</Text>
                           </TouchableHighlight>
                         </View>
