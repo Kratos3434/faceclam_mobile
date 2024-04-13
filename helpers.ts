@@ -27,10 +27,20 @@ export const monthToString = (month: number) => {
   }
 }
 
+const convertTo12Hour = (createdAt: string) => {
+    const date = new Date(createdAt);
+    let hour = date.getHours();
+    let minutes = date.getMinutes();
+    const ampm = hour < 12 ? 'am' : 'pm';
+    hour %= 12;
+    hour = hour ? hour : 12;
+    return `${hour}:${minutes < 10 ? `0${minutes}` : minutes} ${ampm}`;
+  }
+
 export const generateDate = (createdAt: string) => {
   const created = new Date(createdAt);
 
-  return `${monthToString(created.getMonth())} ${created.getDate()}, ${created.getFullYear()}`
+  return `${monthToString(created.getMonth())} ${created.getDate()}, ${created.getFullYear()} at ${convertTo12Hour(createdAt)}`;
 }
 
 // export const linkifyDescrip = (text: string) => {

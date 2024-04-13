@@ -8,6 +8,8 @@ import { currentUserAtom } from "../store";
 import { useState } from "react";
 import { userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
+import Autolink from 'react-native-autolink';
+
 
 interface Props {
   post: PostProps,
@@ -110,7 +112,13 @@ const Card = ({ post, navigation }: Props) => {
         </View>
       </TouchableWithoutFeedback>
       {/**Description */}
-      <Text style={{ paddingHorizontal: 16, fontSize: 15, marginVertical: 8 }}>{post.description}</Text>
+      {/* <Text style={{ paddingHorizontal: 16, fontSize: 15, marginVertical: 8 }}>{post.description}</Text> */}
+      <View style={{ paddingHorizontal: 16, marginVertical: 8 }}>
+        <Autolink text={post.description} url
+          renderText={ 
+            (text) => <Text style={{ fontSize: 15 }}>{text}</Text>
+          } linkStyle={{ color: '#0000EE', fontSize: 15 }} />
+      </View>
       {/**Description */}
       {/**Image */}
       <SharableContent post={post} navigation={navigation} />
