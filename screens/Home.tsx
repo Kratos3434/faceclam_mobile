@@ -92,7 +92,7 @@ const Home = ({ navigation }: { navigation: any }) => {
                 }}
                 ListFooterComponent={() => {
                   return (
-                    query.hasNextPage ? <ActivityIndicator style={{ paddingVertical: 5 }} size={20} /> : <Text style={{textAlign: 'center', marginVertical: 5}}>You are updated :{")"}</Text>
+                    query.hasNextPage ? <ActivityIndicator style={{ paddingVertical: 5, backgroundColor: '#E4E5E7' }} size={20} /> : <Text style={{textAlign: 'center', marginVertical: 5}}>You are updated :{")"}</Text>
                   )
                 }}
                 refreshControl={
