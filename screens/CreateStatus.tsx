@@ -49,7 +49,7 @@ const CreateStatus = ({ navigation }: Props) => {
   }
 
   return (
-    <SafeAreaView style={{backgroundColor: 'white'}}>
+    <SafeAreaView style={{backgroundColor: 'white', flex: 1}}>
       {/**Show loader when user posts */}
       <Loader isVisible={loading} message="Posting, please wait..." />
       {/** END */}

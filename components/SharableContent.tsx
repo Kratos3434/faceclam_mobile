@@ -37,7 +37,7 @@ const SharableContent = ({ post, navigation }: Props) => {
         <View style={{marginHorizontal: 16, borderWidth: .90, borderColor: 'gray', paddingVertical: 5, borderRadius: 8}}>
           <View style={{paddingHorizontal: 16, display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 5}}>
             <TouchableOpacity onPress={goToProfile}>
-              <Image source={post.content.author.profilePicture ? {uri: post.content.author.profilePicture} : require('../assets/placeholder.png')} width={25} height={25} style={{borderRadius: 1000, width: 25, height: 25}} />
+              <Image source={post.content.author.profilePicture ? {uri: post.content.author.profilePicture} : require('../assets/placeholder.png')} width={30} height={30} style={{borderRadius: 1000, width: 30, height: 30}} />
             </TouchableOpacity>
             <View>
               <TouchableOpacity onPress={goToProfile}>
@@ -50,7 +50,7 @@ const SharableContent = ({ post, navigation }: Props) => {
               </Text>
             </View>
           </View>
-          <Text style={{paddingHorizontal: 16, fontSize: 13, marginBottom: 3}}>
+          <Text style={{paddingHorizontal: 16, fontSize: 15, marginBottom: 3}}>
             {post.content.description}
           </Text>
           {
@@ -59,7 +59,7 @@ const SharableContent = ({ post, navigation }: Props) => {
               post.content.featureImage.substring(post.content.featureImage.lastIndexOf('.')) === '.mp4' ?
                 (
                   <Video source={{uri: `https${post.content.featureImage.substring(post.content.featureImage.indexOf(':'))}`}}  isLooping  useNativeControls 
-                  style={{height: 400}} resizeMode={ResizeMode.STRETCH} shouldPlay={true} />
+                  style={{height: 400}} resizeMode={ResizeMode.STRETCH} />
                   // <Video source={{ uri: `https${post.content.featureImage.substring(post.content.featureImage.indexOf(':'))}` }} />
 
                 ) :

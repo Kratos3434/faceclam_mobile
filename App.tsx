@@ -93,7 +93,7 @@ export default function App() {
                       case 'Home':
                         return <Feather name='home' size={size} color={color} />;
                       case 'Menu':
-                        return <Image source={{ uri: currentUser?.profilePicture }} width={25} height={25} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
+                        return <Image source={{ uri: currentUser?.profilePicture }} width={30} height={30} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
                     }
 
                   }

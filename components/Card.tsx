@@ -88,9 +88,9 @@ const Card = ({ post, navigation }: Props) => {
     <View style={{ backgroundColor: 'white', display: 'flex', paddingTop: 8, marginBottom: 5 }}>
       <TouchableWithoutFeedback onPress={viewPost}>
         <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+          <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <TouchableOpacity onPress={goToProfile}>
-              <Image source={post.author.profilePicture ? { uri: post.author.profilePicture } : require('../assets/placeholder.png')} width={35} height={35} style={{ borderRadius: 1000, width: 35, height: 35 }} />
+              <Image source={post.author.profilePicture ? { uri: post.author.profilePicture } : require('../assets/placeholder.png')} width={40} height={40} style={{ borderRadius: 1000, width: 40, height: 40 }} />
             </TouchableOpacity>
             <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <TouchableOpacity onPress={goToProfile}>
@@ -110,7 +110,7 @@ const Card = ({ post, navigation }: Props) => {
         </View>
       </TouchableWithoutFeedback>
       {/**Description */}
-      <Text style={{ paddingHorizontal: 16, fontSize: 13, marginVertical: 3 }}>{post.description}</Text>
+      <Text style={{ paddingHorizontal: 16, fontSize: 15, marginVertical: 8 }}>{post.description}</Text>
       {/**Description */}
       {/**Image */}
       <SharableContent post={post} navigation={navigation} />

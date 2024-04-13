@@ -1,4 +1,4 @@
-import { ActivityIndicator, Text, View } from "react-native"
+import { ActivityIndicator, SafeAreaView, Text, View } from "react-native"
 import ProfileLayout from "./ProfileLayout";
 import { useState } from "react";
 import { UserProps } from "../types";
@@ -33,7 +33,11 @@ const Posts = ({ route, navigation }: Props) => {
   });
 
   if (query.status === 'pending') {
-    return <ActivityIndicator size={70} />
+    return (
+      <SafeAreaView>
+        <ActivityIndicator size={70} />
+      </SafeAreaView>
+    )
   }
 
   return (
