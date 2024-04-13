@@ -124,13 +124,13 @@ const OtherProfile = ({ user, navigation, currentUser, children, name }: Props) 
         <TouchableOpacity style={{ position: 'absolute', left: 0, zIndex: 100 }} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
-        <Text style={{ flex: 1, textAlign: 'center', fontWeight: 'bold' }}>
+        <Text style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>
           (other) {user.firstName} {user.lastName}
         </Text>
       </View>
       <ScrollView style={{ flex: 1 }} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
+      } showsVerticalScrollIndicator={false}>
         <Image source={user.coverPicture ? { uri: user.coverPicture } : require('../assets/gray_bg.jpg')} height={200} resizeMode="stretch" style={{ height: 200 }} />
         {/* <Image source={{uri: query.data?.profilePicture}} width={100} height={100} style={{borderRadius: 1000, position: 'absolute', bottom: -50}} /> */}
         <View style={{ paddingHorizontal: 16, backgroundColor: 'white' }}>
@@ -144,7 +144,7 @@ const OtherProfile = ({ user, navigation, currentUser, children, name }: Props) 
               <Text style={{ color: 'gray' }}>friends</Text>
             </View>
             {user.bio && <Text>{user.bio}</Text>}
-            <View style={{ flexDirection: 'row', marginVertical: 3 }}>
+            <View style={{ flexDirection: 'row', marginVertical: 10 }}>
               {
                 loading ?
                   (

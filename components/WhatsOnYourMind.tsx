@@ -18,28 +18,30 @@ const WhatsOnYourMind = ({ user, navigation }: Props) => {
   }
 
   const pickImageAsync = async () => {
-    // navigation.push('AddPost');
+    navigation.push('AddPost');
+    setSelectedPhoto(null);
     const result = await ImagePicker.launchImageLibraryAsync({
       quality: 1
     });
 
     if (!result.canceled) {
       setSelectedPhoto(result.assets[0]);
-      navigation.push('AddPost');
+      // navigation.push('AddPost');
     } else {
       console.log('No image selected');
+      navigation.navigate('HomeScreen');
     }
   }
 
   return (
-    <View style={{flexDirection: 'row', paddingHorizontal: 16, alignItems: 'center', backgroundColor: 'white', marginBottom: 5, gap: 5, paddingVertical: 5}}>
+    <View style={{flexDirection: 'row', paddingHorizontal: 16, alignItems: 'center', backgroundColor: 'white', borderBottomWidth: 5, gap: 5, paddingVertical: 5, borderColor: '#E4E5E7'}}>
       <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {
         navigation.push('Profile', {
           screen: 'Posts',
           params: {name: `${user.firstName}.${user.lastName}.${user.id}`}
         });
       }} style={{borderRadius: 1000}}>
-        <Image source={user.profilePicture ? {uri: user.profilePicture} : require('../assets/placeholder.png')} width={30} height={30} style={{borderRadius: 1000}} />
+        <Image source={user.profilePicture ? {uri: user.profilePicture} : require('../assets/placeholder.png')} width={40} height={40} style={{borderRadius: 1000, width: 40, height: 40}} />
       </TouchableHighlight>
       <TouchableHighlight style={{flex: 1, borderRadius: 10, paddingVertical: 10, paddingHorizontal: 5}} onPress={createStatus} activeOpacity={0.6} underlayColor="#DDDDDD">
         <Text>What's on your mind?</Text>

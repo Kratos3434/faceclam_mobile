@@ -56,7 +56,11 @@ const ProfileLayout = ({ navigation, children, setUser, name }: { navigation: an
   });
 
   if (query.status === 'pending' || validate.status === 'pending') {
-    return <ActivityIndicator size={70} />;
+    return (
+      <SafeAreaView>
+        <ActivityIndicator size={70} />
+      </SafeAreaView>
+    )
   }
 
   return (
@@ -68,7 +72,7 @@ const ProfileLayout = ({ navigation, children, setUser, name }: { navigation: an
           <>
             {
               validate.data ?
-                (<Profile user={query.data} navigation={navigation}>
+                (<Profile user={query.data} navigation={navigation} name={name}>
                   <View style={{ backgroundColor: '#E4E5E7', paddingVertical: 5 }}>
                     <View style={{ backgroundColor: 'white', paddingVertical: 10 }}>
                       <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 10, borderBottomWidth: 0.5, paddingBottom: 5 }}>

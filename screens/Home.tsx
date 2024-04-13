@@ -72,7 +72,7 @@ const Home = ({ navigation }: { navigation: any }) => {
   return (
     <SafeAreaView style={styles.AndroidSafeArea}>
       <StatusBar barStyle={Platform.OS === 'ios' ? 'dark-content' : 'light-content'} />
-      <View style={{ paddingHorizontal: 16, backgroundColor: 'white' }}>
+      <View style={{ paddingHorizontal: 16, backgroundColor: 'white', marginBottom: 10 }}>
         <Text style={{ fontWeight: 'bold', color: '#0866FF', fontSize: 30 }}>faceclam</Text>
       </View>
       {
@@ -85,10 +85,10 @@ const Home = ({ navigation }: { navigation: any }) => {
             (
               <FlatList
                 showsVerticalScrollIndicator={false}
-                style={{backgroundColor: '#E4E5E7'}}
+                style={{backgroundColor: 'white'}}
                 data={query.data?.pages}
                 renderItem={({ item }) => {
-                  return <FlatList data={item.data} renderItem={({ item }) => { return <Card post={item} navigation={navigation} /> }} />
+                  return <FlatList data={item.data} style={{backgroundColor: '#E4E5E7'}} renderItem={({ item }) => { return <Card post={item} navigation={navigation} /> }} />
                 }}
                 ListFooterComponent={() => {
                   return (
