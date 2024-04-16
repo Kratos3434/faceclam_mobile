@@ -7,6 +7,7 @@ import { respondBottomSheetIndexAtom, selectedProfileAtom, userIdAtom } from "..
 import { useQueryClient } from "@tanstack/react-query";
 import { userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
+import { httpToHTTPS } from "../helpers";
 
 
 interface Props {
@@ -131,10 +132,10 @@ const OtherProfile = ({ user, navigation, currentUser, children, name }: Props) 
       <ScrollView style={{ flex: 1 }} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       } showsVerticalScrollIndicator={false}>
-        <Image source={user.coverPicture ? { uri: user.coverPicture } : require('../assets/gray_bg.jpg')} height={200} resizeMode="stretch" style={{ height: 200 }} />
+        <Image source={user.coverPicture ? { uri: httpToHTTPS(user.coverPicture) } : require('../assets/gray_bg.jpg')} height={200} resizeMode="stretch" style={{ height: 200 }} />
         {/* <Image source={{uri: query.data?.profilePicture}} width={100} height={100} style={{borderRadius: 1000, position: 'absolute', bottom: -50}} /> */}
         <View style={{ paddingHorizontal: 16, backgroundColor: 'white' }}>
-          <Image source={user.profilePicture ? { uri: user.profilePicture } : require('../assets/placeholder.png')} width={150} height={150} style={{ borderRadius: 1000, position: 'absolute', bottom: user.bio ? 115 : 95, left: 8, borderWidth: 3, borderColor: 'white', width: 150, height: 150 }} />
+          <Image source={user.profilePicture ? { uri: httpToHTTPS(user.profilePicture) } : require('../assets/placeholder.jpg')} width={150} height={150} style={{ borderRadius: 1000, position: 'absolute', bottom: user.bio ? 115 : 95, left: 8, borderWidth: 3, borderColor: 'white', width: 150, height: 150 }} />
           <View style={{ paddingTop: 25 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10 }}>
               {user.firstName} {user.lastName}

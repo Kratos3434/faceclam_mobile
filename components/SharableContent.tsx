@@ -1,6 +1,6 @@
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import { PostProps } from "../types";
-import { generateDate } from "../helpers";
+import { generateDate, httpToHTTPS } from "../helpers";
 import { Video, ResizeMode } from 'expo-av';
 import Autolink from 'react-native-autolink';
 // import Video from "react-native-video";
@@ -30,7 +30,7 @@ const SharableContent = ({ post, navigation }: Props) => {
                 style={{ height: 400 }} resizeMode={ResizeMode.STRETCH} />
             ) :
             (
-              <Image source={{ uri: post.featureImage }} height={500} resizeMode="stretch" />
+              <Image source={{ uri: httpToHTTPS(post.featureImage) }} height={500} resizeMode="stretch" />
             )
         )
       ) :
@@ -38,7 +38,7 @@ const SharableContent = ({ post, navigation }: Props) => {
         <View style={{ marginHorizontal: 16, borderWidth: .90, borderColor: 'gray', paddingVertical: 5, borderRadius: 8 }}>
           <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 5 }}>
             <TouchableOpacity onPress={goToProfile}>
-              <Image source={post.content.author.profilePicture ? { uri: post.content.author.profilePicture } : require('../assets/placeholder.png')} width={30} height={30} style={{ borderRadius: 1000, width: 30, height: 30 }} />
+              <Image source={post.content.author.profilePicture ? { uri: post.content.author.profilePicture } : require('../assets/placeholder.jpg')} width={30} height={30} style={{ borderRadius: 1000, width: 30, height: 30 }} />
             </TouchableOpacity>
             <View>
               <TouchableOpacity onPress={goToProfile}>
@@ -68,7 +68,7 @@ const SharableContent = ({ post, navigation }: Props) => {
 
                 ) :
                 (
-                  <Image source={{ uri: post.content.featureImage }} height={400} resizeMode="stretch" />
+                  <Image source={{ uri: httpToHTTPS(post.content.featureImage) }} height={400} resizeMode="stretch" />
                 )
             )
           }

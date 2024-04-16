@@ -4,6 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { useAtom } from "jotai";
 import { selectedPhotoAtom } from "../store";
+import { httpToHTTPS } from "../helpers";
 
 interface Props {
   user: UserProps,
@@ -41,7 +42,7 @@ const WhatsOnYourMind = ({ user, navigation }: Props) => {
           params: {name: `${user.firstName}.${user.lastName}.${user.id}`}
         });
       }} style={{borderRadius: 1000}}>
-        <Image source={user.profilePicture ? {uri: user.profilePicture} : require('../assets/placeholder.png')} width={40} height={40} style={{borderRadius: 1000, width: 40, height: 40}} />
+        <Image source={user.profilePicture ? {uri: httpToHTTPS(user.profilePicture)} : require('../assets/placeholder.png')} width={40} height={40} style={{borderRadius: 1000, width: 40, height: 40}} />
       </TouchableHighlight>
       <TouchableHighlight style={{flex: 1, borderRadius: 10, paddingVertical: 10, paddingHorizontal: 5}} onPress={createStatus} activeOpacity={0.6} underlayColor="#DDDDDD">
         <Text>What's on your mind?</Text>

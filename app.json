@@ -23,7 +23,10 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.yourcompany.bamapp",
-      "versionCode": 1
+      "versionCode": 1,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -43,6 +46,11 @@
           "launchModeExperimental": "most-recent"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f27745b1-1e23-4980-af7f-1ea9c42f8a25"
+      }
+    }
   }
 }

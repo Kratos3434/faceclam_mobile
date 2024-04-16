@@ -3,6 +3,7 @@ import { UserProps } from "../types";
 import { Ionicons } from '@expo/vector-icons'
 import { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { httpToHTTPS } from "../helpers";
 
 interface Props {
   user: UserProps,
@@ -38,11 +39,11 @@ const Profile = ({ user, navigation, children, name }: Props) => {
       <ScrollView style={{ flex: 1 }} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       } showsVerticalScrollIndicator={false}>
-        <Image source={{ uri: user.coverPicture }} height={200} resizeMode="stretch" />
+        <Image source={user.coverPicture ? { uri: httpToHTTPS(user.coverPicture) } : require('../assets/gray_bg.jpg')} height={200} resizeMode="stretch" style={{ height: 200 }} />
         {/* <Image source={{uri: query.data?.profilePicture}} width={100} height={100} style={{borderRadius: 1000, position: 'absolute', bottom: -50}} /> */}
         <View style={{ paddingHorizontal: 16, backgroundColor: 'white' }}>
-          <Image source={{ uri:user.profilePicture }} width={120} height={120} style={{ borderRadius: 1000, position: 'absolute', bottom: 50, left: 8, borderWidth: 3, borderColor: 'white' }} />
-          <View style={{ paddingTop: 25 }}>
+          <Image source={user.profilePicture ? { uri: httpToHTTPS(user.profilePicture) } : require('../assets/placeholder.jpg')} width={150} height={150} style={{ borderRadius: 1000, position: 'absolute', bottom: user.bio ? 70 : 50, left: 8, borderWidth: 3, borderColor: 'white', width: 150, height: 150 }} />
+          <View style={{ paddingTop: 25, paddingBottom: 5 }}>
             <Text style={{ fontWeight: 'bold', fontSize: 18, marginTop: 10 }}>
               {user.firstName} {user.lastName}
             </Text>
@@ -50,6 +51,7 @@ const Profile = ({ user, navigation, children, name }: Props) => {
               <Text style={{ fontWeight: 'bold' }}>{user.friends.length}</Text>
               <Text style={{ color: 'gray' }}>friends</Text>
             </View>
+            {user.bio && <Text>{user.bio}</Text>}
           </View>
         </View>
         {children}

@@ -75,3 +75,7 @@ export const checkValidFileType = (ext: string) => {
             return false;
     }
 }
+
+export const httpToHTTPS = (media: string) => {
+    return `https${media.substring(media.indexOf(':'))}`;
+}
