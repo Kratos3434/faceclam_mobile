@@ -1,7 +1,7 @@
 import { View, Image, Text, TouchableOpacity, StyleSheet, TouchableHighlight, TouchableWithoutFeedback } from "react-native";
 import { Feather, AntDesign, FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import { PostProps } from "../types";
-import { generateDate } from "../helpers";
+import { generateDate, httpToHTTPS } from "../helpers";
 import SharableContent from "./SharableContent";
 import { useAtom } from "jotai";
 import { currentUserAtom } from "../store";
@@ -92,7 +92,7 @@ const Card = ({ post, navigation }: Props) => {
         <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <TouchableOpacity onPress={goToProfile}>
-              <Image source={post.author.profilePicture ? { uri: post.author.profilePicture } : require('../assets/placeholder.png')} width={40} height={40} style={{ borderRadius: 1000, width: 40, height: 40 }} />
+              <Image source={post.author.profilePicture ? { uri: httpToHTTPS(post.author.profilePicture) } : require('../assets/placeholder.png')} width={40} height={40} style={{ borderRadius: 1000, width: 40, height: 40 }} />
             </TouchableOpacity>
             <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <TouchableOpacity onPress={goToProfile}>

@@ -19,6 +19,7 @@ import Photos from './screens/Photos';
 import CreateStatus from './screens/CreateStatus';
 import AddPost from './screens/AddPost';
 import Post from './screens/Post';
+import { httpToHTTPS } from './helpers';
 
 const HomeStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -93,7 +94,7 @@ export default function App() {
                       case 'Home':
                         return <Feather name='home' size={size} color={color} />;
                       case 'Menu':
-                        return <Image source={{ uri: currentUser?.profilePicture }} width={30} height={30} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
+                        return <Image source={currentUser?.profilePicture ? { uri: httpToHTTPS(currentUser?.profilePicture) } : require('./assets/placeholder.jpg')} width={30} height={30} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
                     }
 
                   }
