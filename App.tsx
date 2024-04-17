@@ -20,10 +20,13 @@ import CreateStatus from './screens/CreateStatus';
 import AddPost from './screens/AddPost';
 import Post from './screens/Post';
 import { httpToHTTPS } from './helpers';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { UserProps } from './types';
 
 const HomeStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const ProfileStack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 const queryClient = new QueryClient();
 
@@ -83,34 +86,30 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        {
-          loggedIn ?
-            (
-              <NavigationContainer>
-                <Tab.Navigator screenOptions={({ route }) => ({
-                  tabBarIcon: ({ focused, color, size }) => {
-                    switch (route.name) {
-                      case 'Home':
-                        return <Feather name='home' size={size} color={color} />;
-                      case 'Menu':
-                        return <Image source={currentUser?.profilePicture ? { uri: httpToHTTPS(currentUser?.profilePicture) } : require('./assets/placeholder.jpg')} width={30} height={30} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
-                    }
-
-                  }
-                })}>
-                  <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false, tabBarHideOnKeyboard: true }} />
-                  <Tab.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
-                </Tab.Navigator>
-              </NavigationContainer>
-            ) :
-            (
-              <Login />
-            )
-        }
-        {/** This is opened when pressing respond button */}
-        <RespondBottomSheet />
-      </GestureHandlerRootView>
+      <BottomSheetModalProvider>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          {
+            loggedIn ?
+              (
+                <NavigationContainer>
+                  <Stack.Navigator>
+                    <Stack.Screen name='HomeTabs' options={{ headerShown: false, animation: 'slide_from_right' }}>
+                      {(props) => <HomeTabs {...props} currentUser={currentUser} />}
+                    </Stack.Screen>
+                    <Stack.Screen name='AddPost' component={AddPost} options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+                    <Stack.Screen name='Post' component={Post} options={{ headerShown: false, animation: 'slide_from_right' }} />
+                    <Stack.Screen name='CreateStatus' component={CreateStatus} options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+                  </Stack.Navigator>
+                </NavigationContainer>
+              ) :
+              (
+                <Login />
+              )
+          }
+          {/** This is opened when pressing respond button */}
+          <RespondBottomSheet />
+        </GestureHandlerRootView>
+      </BottomSheetModalProvider>
     </QueryClientProvider>
   );
 }
@@ -121,9 +120,9 @@ const HomeStackScreen = () => {
       <HomeStack.Screen name='HomeScreen' component={Home} options={{ headerShown: false }} />
       {/* <HomeStack.Screen name='Profile' component={Profile} options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
       <HomeStack.Screen name='Profile' component={ProfileStackScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
-      <HomeStack.Screen name='CreateStatus' component={CreateStatus} options={{headerShown: false, animation: 'slide_from_bottom'}} />
-      <HomeStack.Screen name='AddPost' component={AddPost} options={{headerShown: false, animation: 'slide_from_bottom'}} />
-      <HomeStack.Screen name='Post' component={Post} options={{headerShown: false, animation: 'slide_from_right'}} />
+      {/* <HomeStack.Screen name='CreateStatus' component={CreateStatus} options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+      <HomeStack.Screen name='AddPost' component={AddPost} options={{ headerShown: false, animation: 'slide_from_bottom' }} />
+      <HomeStack.Screen name='Post' component={Post} options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
     </HomeStack.Navigator>
   )
 }
@@ -132,8 +131,29 @@ const HomeStackScreen = () => {
 const ProfileStackScreen = () => {
   return (
     <ProfileStack.Navigator>
-      <ProfileStack.Screen name='Posts' component={Posts} options={{headerShown: false, animation: 'none'}} />
-      <ProfileStack.Screen name='Photos' component={Photos} options={{headerShown: false, animation: 'none'}} />
+      <ProfileStack.Screen name='Posts' component={Posts} options={{ headerShown: false, animation: 'none' }} />
+      <ProfileStack.Screen name='Photos' component={Photos} options={{ headerShown: false, animation: 'none' }} />
     </ProfileStack.Navigator>
+  )
+}
+
+const HomeTabs = ({ currentUser }: { currentUser: UserProps | null }) => {
+  // const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
+
+  return (
+    <Tab.Navigator screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        switch (route.name) {
+          case 'Home':
+            return <Feather name='home' size={size} color={color} />;
+          case 'Menu':
+            return <Image source={currentUser?.profilePicture ? { uri: httpToHTTPS(currentUser?.profilePicture) } : require('./assets/placeholder.jpg')} width={30} height={30} style={{ borderRadius: 1000, borderWidth: focused ? 1 : 0, borderColor: focused ? color : 'white' }} />
+        }
+
+      }
+    })}>
+      <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false }} />
+      <Tab.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
+    </Tab.Navigator>
   )
 }

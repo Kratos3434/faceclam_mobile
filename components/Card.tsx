@@ -83,7 +83,7 @@ const Card = ({ post, navigation }: Props) => {
         break;
     }
 
-    !handlingLike && await likePost();
+    // !handlingLike && await likePost();
   }
 
   return (
@@ -115,7 +115,7 @@ const Card = ({ post, navigation }: Props) => {
       {/* <Text style={{ paddingHorizontal: 16, fontSize: 15, marginVertical: 8 }}>{post.description}</Text> */}
       <View style={{ paddingHorizontal: 16, marginVertical: 8 }}>
         <Autolink text={post.description} url
-          renderText={ 
+          renderText={
             (text) => <Text style={{ fontSize: 15 }}>{text}</Text>
           } linkStyle={{ color: '#0000EE', fontSize: 15 }} />
       </View>

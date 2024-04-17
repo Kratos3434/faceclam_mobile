@@ -1,9 +1,9 @@
 import { SafeAreaView, View, TouchableOpacity, Image, Text, ScrollView, TouchableHighlight, ActivityIndicator } from "react-native";
-import { Feather, AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { CommentProps, PostProps } from "../types";
 import { generateDate } from "../helpers";
 import SharableContent from "../components/SharableContent";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useMemo } from "react";
 import { useAtomValue } from "jotai";
 import { currentUserAtom } from "../store";
 import { publicBaseURL } from "../env";
@@ -16,15 +16,22 @@ interface Props {
 }
 
 const Post = ({ route, navigation }: Props) => {
+  const snapPoints = useMemo(() => ['25%', '50%', '70%'], []);
   const post: PostProps = route.params.post;
   const currentUser = useAtomValue(currentUserAtom);
   const [isLiked, setIsLiked] = useState(post.likes.some(e => e.userId === currentUser?.id));
   const [likes, setLikes] = useState(post.likes.length);
 
   const goToProfile = () => {
-    navigation.push('Profile', {
-      screen: 'Posts',
-      params: { name: `${post.author.firstName}.${post.author.lastName}.${post.author.id}` }
+    navigation.push('HomeTabs', {
+      screen: 'Home',
+      params: { 
+        screen: 'Profile',
+        params: { 
+          screen: 'Posts',
+          params: { name: `${post.author.firstName}.${post.author.lastName}.${post.author.id}` }
+         }
+       }
     });
   }
 
@@ -39,11 +46,29 @@ const Post = ({ route, navigation }: Props) => {
     queryFn: getCommentByPostId
   })
 
+  const handleLike = async () => {
+    switch (isLiked) {
+      case true:
+        setLikes(likes - 1);
+        setIsLiked(false);
+        break;
+      case false:
+        setLikes(likes + 1);
+        setIsLiked(true);
+        break;
+    }
+
+    // !handlingLike && await likePost();
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       <View style={{ flexDirection: 'row', paddingHorizontal: 8, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, backgroundColor: 'white' }}>
         <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity onPress={() => {
+            navigation.goBack()
+            // navigation.push('HomeTabs');
+          }}>
             <Ionicons name="chevron-back" size={24} color="black" />
           </TouchableOpacity>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
@@ -67,7 +92,7 @@ const Post = ({ route, navigation }: Props) => {
           <SharableContent post={post} navigation={navigation} />
         </View>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 8, alignItems: 'center' }}>
-          <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+          <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }} onPress={handleLike}>
             <AntDesign name="like2" size={20} color={isLiked ? "blue" : "black"} />
             <Text style={{ color: isLiked ? 'blue' : 'gray', fontSize: 13 }}>Like</Text>
           </TouchableOpacity>
@@ -106,12 +131,12 @@ const Post = ({ route, navigation }: Props) => {
                     query.data?.map((e, idx) => {
                       return (
                         <Fragment key={idx}>
-                          <Comment comment={e} />
+                          <Comment comment={e} navigation={navigation} />
                         </Fragment>
                       )
                     })
                   )
-                }
+                } 
               </View>
             )
           }
@@ -121,4 +146,4 @@ const Post = ({ route, navigation }: Props) => {
   )
 }
 
-export default Post;
+export default Post;          

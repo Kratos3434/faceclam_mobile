@@ -2,16 +2,23 @@ import { Image, Text, TouchableHighlight, View } from "react-native";
 import { CommentProps } from "../types";
 
 interface Props {
-  comment: CommentProps
+  comment: CommentProps,
+  navigation: any
 }
 
-const Comment = ({ comment }: Props) => {
+const Comment = ({ comment, navigation }: Props) => {
 
   const goToProfile = () => {
-    // navigation.push('Profile', {
-    //   screen: 'Posts',
-    //   params: { name: `${comment.author.firstName}.${comment.author.lastName}.${comment.author.id}` }
-    // });
+    navigation.push('HomeTabs', {
+      screen: 'Home',
+      params: { 
+        screen: 'Profile',
+        params: { 
+          screen: 'Posts',
+          params: { name: `${comment.author.firstName}.${comment.author.lastName}.${comment.author.id}` }
+         }
+       }
+    });
   }
 
   return (

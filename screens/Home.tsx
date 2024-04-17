@@ -6,11 +6,12 @@ import { PostProps } from "../types";
 import { useAtom } from "jotai";
 import { currentUserAtom, lastCreatedAtom } from "../store";
 import WhatsOnYourMind from "../components/WhatsOnYourMind";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { StatusBar } from "react-native";
 import { styles } from "../styles";
 
 const Home = ({ navigation }: { navigation: any }) => {
+  const snapPoints = useMemo(() => ['25%', '50%', '70%'], []);
   const [currentUser, setCurrentUser] = useAtom(currentUserAtom);
   const [refreshing, setRefreshing] = useState(false);
   const queryClient = useQueryClient();
@@ -33,6 +34,13 @@ const Home = ({ navigation }: { navigation: any }) => {
 
     const res = await fetch(fetchSum);
     const data = await res.json();
+
+    if (data.status) {
+      data.data.map((e: PostProps) => {
+        
+      })
+    }
+
     if (data.data.length == limit) {
       setLastCreated(data.data[data.data.length - 1].createdAt);
     } else {
@@ -42,7 +50,7 @@ const Home = ({ navigation }: { navigation: any }) => {
     return {
       data: data.data,
       currentPage: pageParam,
-      nextPage: data.data.length === limit ? data.data[data.data.length - 1].createdAt : null
+      nextPage: lastCreated
     }
   }
 
@@ -50,12 +58,12 @@ const Home = ({ navigation }: { navigation: any }) => {
     queryKey: ['posts'],
     queryFn: getPosts,
     initialPageParam: "",
-    getNextPageParam: (lastPage) => lastPage.nextPage
+    getNextPageParam: (lastPage) => lastPage.nextPage,
   })
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await queryClient.invalidateQueries({
+    await queryClient.resetQueries({
       queryKey: ['posts'],
       exact: true
     });
@@ -75,35 +83,34 @@ const Home = ({ navigation }: { navigation: any }) => {
       <View style={{ paddingHorizontal: 16, backgroundColor: 'white', marginBottom: 10 }}>
         <Text style={{ fontWeight: 'bold', color: '#0866FF', fontSize: 30 }}>faceclam</Text>
       </View>
-      {
-        query.isPending ?
-          (
-            <ActivityIndicator size={70} />
-          ) :
-          (
-            query.isSuccess &&
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        style={{ backgroundColor: 'white' }}
+        data={query.data?.pages}
+        renderItem={({ item }) => {
+          return <FlatList data={item.data} style={{ backgroundColor: '#E4E5E7' }} renderItem={({ item }) => { 
+            if (query.isPending) {
+              return <ActivityIndicator size={70} />
+            } else if (query.isSuccess) {
+              return <Card post={item} navigation={navigation} />
+            }
+            return <ActivityIndicator size={70} />
+           }} />
+        }}
+        ListFooterComponent={() => {
+          return (
+            query.hasNextPage ? <ActivityIndicator style={{ paddingVertical: 5, backgroundColor: '#E4E5E7' }} size={20} /> : 
             (
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                style={{backgroundColor: 'white'}}
-                data={query.data?.pages}
-                renderItem={({ item }) => {
-                  return <FlatList data={item.data} style={{backgroundColor: '#E4E5E7'}} renderItem={({ item }) => { return <Card post={item} navigation={navigation} /> }} />
-                }}
-                ListFooterComponent={() => {
-                  return (
-                    query.hasNextPage ? <ActivityIndicator style={{ paddingVertical: 5, backgroundColor: '#E4E5E7' }} size={20} /> : <Text style={{textAlign: 'center', marginVertical: 5}}>You are updated :{")"}</Text>
-                  )
-                }}
-                refreshControl={
-                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                }
-                ListHeaderComponent={() => { return currentUser && <WhatsOnYourMind user={currentUser} navigation={navigation} /> }}
-                onEndReached={loadMore}
-              />
+              !query.isPending && <Text style={{ textAlign: 'center', marginVertical: 5 }}>You are updated :{")"}</Text>
             )
           )
-      }
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={() => { return currentUser && <WhatsOnYourMind user={currentUser} navigation={navigation} /> }}
+        onEndReached={loadMore}
+      />
     </SafeAreaView>
   )
 }

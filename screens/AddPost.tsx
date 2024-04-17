@@ -56,8 +56,7 @@ const AddPost = ({ navigation }: Props) => {
         isLoading(false);
       } else {
         await queryClient.invalidateQueries({
-          queryKey: ['posts'],
-          exact: true
+          queryKey: ['posts']
         });
         navigation.goBack();
       }

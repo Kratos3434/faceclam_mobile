@@ -4,19 +4,15 @@
   },
   "build": {
     "development": {
-      "extends": "preview",
       "developmentClient": true,
-      "releaseChannel": "development"
+      "distribution": "internal"
     },
     "preview": {
-      "releaseChannel": "staging",
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
+      "distribution": "internal"
     },
-    "production": {
-      "android": {}
-    }
+    "production": {}
+  },
+  "submit": {
+    "production": {}
   }
 }
