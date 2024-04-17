@@ -4,7 +4,7 @@ import { PostProps } from "../types";
 import { generateDate, httpToHTTPS } from "../helpers";
 import SharableContent from "./SharableContent";
 import { useAtom } from "jotai";
-import { currentUserAtom } from "../store";
+import { currentUserAtom, likesAtom } from "../store";
 import { useState } from "react";
 import { userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
@@ -18,8 +18,11 @@ interface Props {
 
 const Card = ({ post, navigation }: Props) => {
   const [currentUser, setCurrent] = useAtom(currentUserAtom);
-  const [isLiked, setIsLiked] = useState(post.likes.some(e => e.userId === currentUser?.id));
-  const [likes, setLikes] = useState(post.likes.length);
+  const [l, setL] = useAtom(likesAtom);
+  // const [isLiked, setIsLiked] = useState(l.get(post.id)?.some(e => e.userId === currentUser?.id));
+  const isLiked = l.get(post.id)?.some(e => e.userId === currentUser?.id);
+  // const [likes, setLikes] = useState(l.get(post.id)?.length);
+  const likes = l.get(post.id)?.length;
   const [handlingLike, setHandlingLike] = useState(false);
 
   const goToProfile = () => {
@@ -72,18 +75,46 @@ const Card = ({ post, navigation }: Props) => {
   }
 
   const handleLike = async () => {
-    switch (isLiked) {
-      case true:
-        setLikes(likes - 1);
-        setIsLiked(false);
-        break;
-      case false:
-        setLikes(likes + 1);
-        setIsLiked(true);
-        break;
+    if (likes !== undefined) {
+      // switch (isLiked) {
+      //   case true:
+      //     setLikes(likes - 1);
+      //     setIsLiked(false);
+      //     break;
+      //   case false:
+      //     setLikes(likes + 1);
+      //     setIsLiked(true);
+      //     break;
+      // }
+      if (isLiked) {
+        let res = l.get(post.id);
+        res = res?.filter(e => e.userId != currentUser?.id);
+        if (res) {
+          l.set(post.id, res);
+          const newLikes = new Map(l);
+          setL(newLikes);
+        }
+      } else {
+        let res = l.get(post.id);
+        if (currentUser) {
+          res?.push({
+            id: res.length > 0 ? res[res.length-1].id + 1 : 1,
+            post: post,
+            postId: post.id,
+            user: currentUser,
+            userId: currentUser.id,
+            createdAt: `${new Date()}`
+          })
+          if (res) {
+            l.set(post.id, res);
+            const newLikes = new Map(l);
+            setL(newLikes);
+          }
+        }
+      }
     }
 
-    // !handlingLike && await likePost();
+    !handlingLike && await likePost();
   }
 
   return (
