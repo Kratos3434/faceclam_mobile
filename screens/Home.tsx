@@ -4,7 +4,7 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { publicBaseURL } from "../env";
 import { PostProps } from "../types";
 import { useAtom } from "jotai";
-import { currentUserAtom, lastCreatedAtom } from "../store";
+import { currentUserAtom, lastCreatedAtom, likesAtom } from "../store";
 import WhatsOnYourMind from "../components/WhatsOnYourMind";
 import { useState, useCallback, useMemo } from "react";
 import { StatusBar } from "react-native";
@@ -16,6 +16,7 @@ const Home = ({ navigation }: { navigation: any }) => {
   const [refreshing, setRefreshing] = useState(false);
   const queryClient = useQueryClient();
   const [lastCreated, setLastCreated] = useAtom(lastCreatedAtom);
+  const [likes, setLikes] = useAtom(likesAtom);
 
   const limit = 5;
 
@@ -37,7 +38,7 @@ const Home = ({ navigation }: { navigation: any }) => {
 
     if (data.status) {
       data.data.map((e: PostProps) => {
-        
+        likes.set(e.id, e.likes);
       })
     }
 
@@ -88,21 +89,19 @@ const Home = ({ navigation }: { navigation: any }) => {
         style={{ backgroundColor: 'white' }}
         data={query.data?.pages}
         renderItem={({ item }) => {
-          return <FlatList data={item.data} style={{ backgroundColor: '#E4E5E7' }} renderItem={({ item }) => { 
-            if (query.isPending) {
-              return <ActivityIndicator size={70} />
-            } else if (query.isSuccess) {
+          return <FlatList data={item.data} style={{ backgroundColor: '#E4E5E7' }} renderItem={({ item }) => {
+            if (query.isSuccess) {
               return <Card post={item} navigation={navigation} />
             }
             return <ActivityIndicator size={70} />
-           }} />
+          }} />
         }}
         ListFooterComponent={() => {
           return (
-            query.hasNextPage ? <ActivityIndicator style={{ paddingVertical: 5, backgroundColor: '#E4E5E7' }} size={20} /> : 
-            (
-              !query.isPending && <Text style={{ textAlign: 'center', marginVertical: 5 }}>You are updated :{")"}</Text>
-            )
+            query.hasNextPage ? <ActivityIndicator style={{ paddingVertical: 5, backgroundColor: '#E4E5E7' }} size={20} /> :
+              (
+                !query.isPending && <Text style={{ textAlign: 'center', marginVertical: 5 }}>You are updated :{")"}</Text>
+              )
           )
         }}
         refreshControl={
