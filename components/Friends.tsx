@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { Text, TouchableHighlight, View } from "react-native";
 import { FriendProps } from "../types";
 import FriendsCard from "./FriendsCard";
 import { Fragment } from "react";

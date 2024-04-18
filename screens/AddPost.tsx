@@ -53,15 +53,18 @@ const AddPost = ({ navigation }: Props) => {
   
       if (!data.status) {
         setError(data.error);
+        setSelectedPhoto(null);
         isLoading(false);
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['posts']
         });
+        setSelectedPhoto(null);
         navigation.goBack();
       }
     } catch (err) {
       console.log(err);
+      setSelectedPhoto(null);
       setError("Something went wrong :(");
       isLoading(false);
     }

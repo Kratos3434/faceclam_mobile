@@ -182,7 +182,7 @@ const Card = ({ post, navigation }: Props) => {
             <AntDesign name="like2" size={20} color={isLiked ? "blue" : "black"} />
             <Text style={{ color: isLiked ? 'blue' : 'gray', fontSize: 13 }}>Like</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+          <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }} onPress={viewPost}>
             <FontAwesome name="comment-o" size={20} color="black" />
             <Text style={{ color: 'gray', fontSize: 13 }}>Comment</Text>
           </TouchableOpacity>

@@ -22,11 +22,13 @@ import Post from './screens/Post';
 import { httpToHTTPS } from './helpers';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { UserProps } from './types';
+import Friends from './screens/Friends';
 
 const HomeStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const ProfileStack = createNativeStackNavigator();
 const Stack = createNativeStackNavigator();
+const MenuStack = createNativeStackNavigator();
 
 const queryClient = new QueryClient();
 
@@ -133,7 +135,17 @@ const ProfileStackScreen = () => {
     <ProfileStack.Navigator>
       <ProfileStack.Screen name='Posts' component={Posts} options={{ headerShown: false, animation: 'none' }} />
       <ProfileStack.Screen name='Photos' component={Photos} options={{ headerShown: false, animation: 'none' }} />
+      <ProfileStack.Screen name='Friends' component={Friends} options={{ headerShown: false, animation: 'slide_from_right' }} />
     </ProfileStack.Navigator>
+  )
+}
+
+const MenuStackScreen = () => {
+  return (
+    <MenuStack.Navigator>
+      <MenuStack.Screen name='MenuScreen' component={Menu} options={{ headerShown: false, animation: 'none' }} />
+      <MenuStack.Screen name='Profile' component={ProfileStackScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
+    </MenuStack.Navigator>
   )
 }
 
@@ -153,7 +165,7 @@ const HomeTabs = ({ currentUser }: { currentUser: UserProps | null }) => {
       }
     })}>
       <Tab.Screen name='Home' component={HomeStackScreen} options={{ headerShown: false }} />
-      <Tab.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
+      <Tab.Screen name='Menu' component={MenuStackScreen} options={{ headerShown: false }} />
     </Tab.Navigator>
   )
 }

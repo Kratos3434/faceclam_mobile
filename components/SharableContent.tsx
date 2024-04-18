@@ -1,4 +1,4 @@
-import { View, Image, Text, TouchableOpacity } from "react-native";
+import { View, Image, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { PostProps } from "../types";
 import { generateDate, httpToHTTPS } from "../helpers";
 import { Video, ResizeMode } from 'expo-av';
@@ -19,6 +19,12 @@ const SharableContent = ({ post, navigation }: Props) => {
     });
   }
 
+  const viewPost = () => {
+    navigation.navigate('Post', {
+      post: post
+    });
+  }
+
   return (
     !post.content ?
       (
@@ -36,22 +42,24 @@ const SharableContent = ({ post, navigation }: Props) => {
       ) :
       (
         <View style={{ marginHorizontal: 16, borderWidth: .90, borderColor: 'gray', paddingVertical: 5, borderRadius: 8 }}>
-          <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 5 }}>
-            <TouchableOpacity onPress={goToProfile}>
-              <Image source={post.content.author.profilePicture ? { uri: post.content.author.profilePicture } : require('../assets/placeholder.jpg')} width={30} height={30} style={{ borderRadius: 1000, width: 30, height: 30 }} />
-            </TouchableOpacity>
-            <View>
+          <TouchableWithoutFeedback onPress={viewPost}>
+            <View style={{ paddingHorizontal: 16, display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center', marginBottom: 5 }}>
               <TouchableOpacity onPress={goToProfile}>
-                <Text style={{ fontWeight: 'bold', fontSize: 13 }}>
-                  {post.content.author.firstName} {post.content.author.lastName}
-                </Text>
+                <Image source={post.content.author.profilePicture ? { uri: post.content.author.profilePicture } : require('../assets/placeholder.jpg')} width={30} height={30} style={{ borderRadius: 1000, width: 30, height: 30 }} />
               </TouchableOpacity>
-              <Text style={{ color: 'gray', fontSize: 9 }}>
-                {generateDate(post.content.createdAt)}
-              </Text>
+              <View>
+                <TouchableOpacity onPress={goToProfile}>
+                  <Text style={{ fontWeight: 'bold', fontSize: 13 }}>
+                    {post.content.author.firstName} {post.content.author.lastName}
+                  </Text>
+                </TouchableOpacity>
+                <Text style={{ color: 'gray', fontSize: 9 }}>
+                  {generateDate(post.content.createdAt)}
+                </Text>
+              </View>
             </View>
-          </View>
-          <View style={{paddingHorizontal: 16, marginBottom: 5}}>
+          </TouchableWithoutFeedback>
+          <View style={{ paddingHorizontal: 16, marginBottom: 5 }}>
             <Autolink text={post.content.description} url
               renderText={
                 (text) => <Text style={{ fontSize: 15 }}>{text}</Text>

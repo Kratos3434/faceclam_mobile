@@ -1,17 +1,18 @@
-import { SafeAreaView, View, TouchableOpacity, Image, Text, ScrollView, TouchableHighlight, ActivityIndicator } from "react-native";
+import { SafeAreaView, View, TouchableOpacity, Image, Text, ScrollView, TouchableHighlight, ActivityIndicator, Keyboard } from "react-native";
 import { AntDesign, FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { CommentProps, PostProps } from "../types";
 import { generateDate } from "../helpers";
 import SharableContent from "../components/SharableContent";
-import { Fragment, useState, useMemo } from "react";
+import { Fragment, useState, useMemo, useRef } from "react";
 import { useAtom, useAtomValue } from "jotai";
 import { currentUserAtom, likesAtom } from "../store";
 import { publicBaseURL } from "../env";
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
 import Comment from "../components/Comment";
 import { userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
 import { TextInput } from "react-native-gesture-handler";
+
 interface Props {
   route: any,
   navigation: any
@@ -25,6 +26,10 @@ const Post = ({ route, navigation }: Props) => {
   const [isLiked, setIsLiked] = useState(l.get(post.id)?.some(e => e.userId === currentUser?.id));
   const [likes, setLikes] = useState(l.get(post.id)?.length);
   const [handlingLike, setHandlingLike] = useState(false);
+  const [comment, setComment] = useState("");
+  const commentRef = useRef<TextInput>(null)
+  const queryClient = useQueryClient();
+  const [loading, setLoading] = useState(false);
 
   const goToProfile = () => {
     navigation.push('HomeTabs', {
@@ -129,6 +134,39 @@ const Post = ({ route, navigation }: Props) => {
     !handlingLike && await likePost();
   }
 
+  const focusComment = () => {
+    commentRef.current?.focus();
+  }
+
+  const handleComment = async () => {
+    setLoading(true);
+    const commentary = comment;
+    setComment("");
+    Keyboard.dismiss();
+
+    const res = await fetch(`${userBaseURL}/add/comment`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${await SecureStore.getItemAsync('token')}`
+      },
+      body: JSON.stringify({
+        comment: commentary,
+        postId: post.id
+      })
+    });
+
+    const data = await res.json();
+
+    if (data.status) {
+      await queryClient.invalidateQueries({
+        queryKey: ['comments', post.id],
+        exact: true
+      });
+      setLoading(false);
+    }
+  }
+
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       <View style={{ flexDirection: 'row', paddingHorizontal: 8, justifyContent: 'space-between', alignItems: 'center', paddingVertical: 8, backgroundColor: 'white' }}>
@@ -164,7 +202,7 @@ const Post = ({ route, navigation }: Props) => {
             <AntDesign name="like2" size={20} color={isLiked ? "blue" : "black"} />
             <Text style={{ color: isLiked ? 'blue' : 'gray', fontSize: 13 }}>Like</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }}>
+          <TouchableOpacity style={{ display: 'flex', flexDirection: 'row', gap: 5, alignItems: 'center' }} onPress={focusComment}>
             <FontAwesome name="comment-o" size={20} color="black" />
             <Text style={{ color: 'gray', fontSize: 13 }}>Comment</Text>
           </TouchableOpacity>
@@ -210,10 +248,15 @@ const Post = ({ route, navigation }: Props) => {
           }
         </View>
       </ScrollView>
-      <View style={{ paddingHorizontal: 8, paddingVertical: 5, borderTopWidth: 1, borderColor: 'rgba(0, 0, 0, 0.5)' }}>
-        <View style={{backgroundColor: '#D3D3D3', borderRadius: 24, paddingHorizontal: 8, paddingVertical: 1}}>
-          <TextInput multiline placeholder="Say something about this post" />
+      <View style={{ paddingHorizontal: 8, paddingVertical: 5, borderTopWidth: 1, borderColor: 'rgba(0, 0, 0, 0.5)', flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+        <View style={{backgroundColor: '#D3D3D3', borderRadius: 24, paddingHorizontal: 8, paddingVertical: 1, flex: 1}}>
+          <TextInput multiline placeholder="Say something about this post" onChangeText={(text) => setComment(text)} ref={commentRef} value={comment} />
         </View>
+        { comment && (
+          <TouchableOpacity onPress={() => !loading && handleComment()}>
+            <Ionicons name="send" size={24} color={loading ? '#D3D3D3' : '#0866FF'} />
+          </TouchableOpacity>
+        ) }
       </View>
     </SafeAreaView>
   )

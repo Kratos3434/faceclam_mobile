@@ -1,4 +1,4 @@
-import { ActivityIndicator, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { styles } from "../styles";
 import { useRef, useState } from "react";
 import { FontAwesome } from '@expo/vector-icons';
@@ -80,13 +80,13 @@ const Login = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.LoginSafeArea}>
-        {
+        {/* {
           loading &&
           <MyModal>
             <ActivityIndicator size={70} />
             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 15, marginVertical: 15 }}>Logging in, please wait...</Text>
           </MyModal>
-        }
+        } */}
         <Text style={{ fontWeight: 'bold', color: '#0866FF', fontSize: 70 }}>faceclam</Text>
         <View style={{ paddingHorizontal: 16, width: '100%', gap: 10 }}>
           <TextInput placeholder="Email" style={{ borderRadius: 6, padding: 8, borderWidth: 1, borderColor: 'gray' }} returnKeyType="next" onSubmitEditing={() => {
@@ -110,8 +110,10 @@ const Login = () => {
             </TouchableOpacity>
           </View>
           {error && <Text style={{ textAlign: 'center', fontSize: 13, color: 'red' }}>*{error}</Text>}
-          <TouchableOpacity style={{ borderRadius: 1000, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#0866FF', paddingVertical: 10 }} onPress={handleLogin}>
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>Log in</Text>
+          <TouchableOpacity style={{ borderRadius: 1000, display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#0866FF', paddingVertical: 10 }} onPress={() => !loading && handleLogin()}>
+            {
+              loading ? <ActivityIndicator size={20} /> : <Text style={{ color: 'white', fontWeight: 'bold' }}>Log in</Text>
+            }
           </TouchableOpacity>
         </View>
       </ScrollView>

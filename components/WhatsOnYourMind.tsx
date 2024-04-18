@@ -29,6 +29,7 @@ const WhatsOnYourMind = ({ user, navigation }: Props) => {
       setSelectedPhoto(result.assets[0]);
       // navigation.push('AddPost');
     } else {
+      setSelectedPhoto(null);
       console.log('No image selected');
       navigation.navigate('HomeScreen');
     }

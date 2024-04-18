@@ -1,4 +1,4 @@
-import { ActivityIndicator, SafeAreaView, Text, View } from "react-native"
+import { ActivityIndicator, SafeAreaView, Text, View, TouchableHighlight } from "react-native"
 import ProfileLayout from "./ProfileLayout";
 import { useState } from "react";
 import { UserProps } from "../types";
@@ -27,6 +27,13 @@ const Posts = ({ route, navigation }: Props) => {
     return data.data;
   }
 
+  const seeAllFriends = () => {
+    navigation.push('Profile', {
+      screen: 'Friends',
+      params: { name }
+    });
+  }
+
   const query = useQuery({
     queryKey: ['friends', name],
     queryFn: getFriends
@@ -46,6 +53,9 @@ const Posts = ({ route, navigation }: Props) => {
         <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Friends</Text>
         <Text style={{ fontSize: 13, color: 'gray' }}>{cache ? cache?.friends.length : user?.friends.length} friends</Text>
         <Friends friends={query.data} currentId={cache ? cache?.id : user?.id} navigation={navigation} />
+        <TouchableHighlight style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#D3D3D3', borderRadius: 6, paddingVertical: 7, marginTop: 5 }} onPress={seeAllFriends} activeOpacity={0.6} underlayColor='rgb(156 163 175)'>
+          <Text style={{fontWeight: 'bold'}}>See all friends</Text>
+        </TouchableHighlight>
       </View>
     </ProfileLayout>
   )

@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Text, Image, ScrollView, RefreshControl } from "react-native";
 import { UserProps } from "../types";
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons';
 import { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { httpToHTTPS } from "../helpers";

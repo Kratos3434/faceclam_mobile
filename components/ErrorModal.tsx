@@ -16,7 +16,7 @@ const ErrorModal = ({ isVisible, errorMessage, handleClose }: Props) => {
         <View style={{ backgroundColor: 'white', borderRadius: 6, width: 200 }}>
           <Text style={{ color: 'red', fontWeight: 'bold', textAlign: 'center', borderBottomWidth: 1, borderColor: '#bbb', paddingVertical: 8 }}>ERROR</Text>
           <Text style={{paddingVertical: 10, paddingHorizontal: 16, textAlign: 'center', fontSize: 13, borderBottomWidth: 1, borderColor: '#bbb'}}>{errorMessage}</Text>
-          <TouchableHighlight style={{paddingVertical: 5, alignItems: 'center', borderBottomEndRadius: 6, borderBottomLeftRadius: 6}} onPress={handleClose} activeOpacity={0.6} underlayColor="#DDDDDD" >
+          <TouchableHighlight style={{paddingVertical: 5, alignItems: 'center', borderBottomEndRadius: 6, borderBottomLeftRadius: 6}} onPress={handleClose} activeOpacity={0.6} underlayColor="#DDDDDD">
             <Text style={{color: '#0866FF'}}>Close</Text>
           </TouchableHighlight>
         </View>

@@ -16,6 +16,6 @@ export const styles = StyleSheet.create({
   MenuSafeArea: {
     flex: 1,
     backgroundColor: '#D3D3D3',
-    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    // marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });
