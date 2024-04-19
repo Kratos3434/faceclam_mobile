@@ -5,7 +5,6 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useAtom } from "jotai";
 import { currentUserAtom, loginAtom } from "../store";
 import * as SecureStore from 'expo-secure-store';
-import MyModal from "../components/MyModal";
 import { publicBaseURL } from "../env";
 import { userBaseURL } from "../env";
 

@@ -4,7 +4,7 @@ import Home from './screens/Home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import Login from './screens/Login';
 import { useAtom } from 'jotai';
@@ -23,6 +23,7 @@ import { httpToHTTPS } from './helpers';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { UserProps } from './types';
 import Friends from './screens/Friends';
+import Saved from './screens/Saved';
 
 const HomeStack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -120,11 +121,7 @@ const HomeStackScreen = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen name='HomeScreen' component={Home} options={{ headerShown: false }} />
-      {/* <HomeStack.Screen name='Profile' component={Profile} options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
       <HomeStack.Screen name='Profile' component={ProfileStackScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
-      {/* <HomeStack.Screen name='CreateStatus' component={CreateStatus} options={{ headerShown: false, animation: 'slide_from_bottom' }} />
-      <HomeStack.Screen name='AddPost' component={AddPost} options={{ headerShown: false, animation: 'slide_from_bottom' }} />
-      <HomeStack.Screen name='Post' component={Post} options={{ headerShown: false, animation: 'slide_from_right' }} /> */}
     </HomeStack.Navigator>
   )
 }
@@ -145,6 +142,8 @@ const MenuStackScreen = () => {
     <MenuStack.Navigator>
       <MenuStack.Screen name='MenuScreen' component={Menu} options={{ headerShown: false, animation: 'none' }} />
       <MenuStack.Screen name='Profile' component={ProfileStackScreen} options={{ headerShown: false, animation: 'slide_from_right' }} />
+      <MenuStack.Screen name='Saved' component={Saved} options={{ headerShown: false, animation: 'slide_from_right' }} />
+      <MenuStack.Screen name='Post' component={Post} options={{ headerShown: false, animation: 'slide_from_right' }} />
     </MenuStack.Navigator>
   )
 }

@@ -5,6 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Fragment, useCallback, useState } from "react";
 import DisplayFriend from "../components/DisplayFriend";
 import { FriendProps } from "../types";
+import Header from "../components/Header";
 
 interface Props {
   route: any,
@@ -43,12 +44,13 @@ const Friends = ({ route, navigation }: Props) => {
 
   return (
     <>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 8, paddingVertical: 10, position: 'relative' }}>
+      {/* <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', paddingHorizontal: 8, paddingVertical: 10, position: 'relative' }}>
         <TouchableOpacity style={{ position: 'absolute', left: 0, zIndex: 100 }} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={{ fontWeight: 'bold', fontSize: 15 }}>{firstName} {lastName}'s friends</Text>
-      </View>
+      </View> */}
+      <Header navigation={navigation} heading={`${firstName} ${lastName}'s friends`} />
       <ScrollView style={{ paddingHorizontal: 8 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
         <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Friends list</Text>
         {

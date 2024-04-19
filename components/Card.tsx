@@ -9,6 +9,7 @@ import { useState } from "react";
 import { userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
 import Autolink from 'react-native-autolink';
+import { useQueryClient } from "@tanstack/react-query";
 
 
 interface Props {
@@ -24,6 +25,7 @@ const Card = ({ post, navigation }: Props) => {
   // const [likes, setLikes] = useState(l.get(post.id)?.length);
   const likes = l.get(post.id)?.length;
   const [handlingLike, setHandlingLike] = useState(false);
+  const queryClient = useQueryClient();
 
   const goToProfile = () => {
     navigation.push('Profile', {
@@ -50,6 +52,11 @@ const Card = ({ post, navigation }: Props) => {
     });
 
     const data = await res.json();
+    
+    await queryClient.invalidateQueries({
+      queryKey: ['likes', post.id],
+      exact: true
+    });
 
     if (data.status) {
       if (post.author.email != currentUser?.email) {

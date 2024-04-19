@@ -8,6 +8,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { userBaseURL } from "../env";
 import * as SecureStore from 'expo-secure-store';
 import { httpToHTTPS } from "../helpers";
+import Header from "./Header";
 
 
 interface Props {
@@ -121,14 +122,15 @@ const OtherProfile = ({ user, navigation, currentUser, children, name }: Props) 
           </View>
         </View>
       </Modal>
-      <View style={{ backgroundColor: 'white', flexDirection: 'row', paddingVertical: 10, alignItems: 'center', position: 'relative', justifyContent: 'center' }}>
+      {/* <View style={{ backgroundColor: 'white', flexDirection: 'row', paddingVertical: 10, alignItems: 'center', position: 'relative', justifyContent: 'center' }}>
         <TouchableOpacity style={{ position: 'absolute', left: 0, zIndex: 100 }} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>
           (other) {user.firstName} {user.lastName}
         </Text>
-      </View>
+      </View> */}
+      <Header navigation={navigation} heading={`(other) ${user.firstName} ${user.lastName}`} />
       <ScrollView style={{ flex: 1 }} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       } showsVerticalScrollIndicator={false}>

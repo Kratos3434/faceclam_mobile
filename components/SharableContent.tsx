@@ -21,7 +21,7 @@ const SharableContent = ({ post, navigation }: Props) => {
 
   const viewPost = () => {
     navigation.navigate('Post', {
-      post: post
+      post: post.content
     });
   }
 

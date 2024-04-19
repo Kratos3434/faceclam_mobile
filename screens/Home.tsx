@@ -39,6 +39,9 @@ const Home = ({ navigation }: { navigation: any }) => {
     if (data.status) {
       data.data.map((e: PostProps) => {
         likes.set(e.id, e.likes);
+        if (e.content) {
+          likes.set(e.content.id, e.content.likes);
+        }
       })
     }
 

@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState, useCallback } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { httpToHTTPS } from "../helpers";
+import Header from "./Header";
 
 interface Props {
   user: UserProps,
@@ -28,14 +29,7 @@ const Profile = ({ user, navigation, children, name }: Props) => {
 
   return (
     <>
-      <View style={{ backgroundColor: 'white', flexDirection: 'row', paddingVertical: 10, alignItems: 'center', position: 'relative', justifyContent: 'center' }}>
-        <TouchableOpacity style={{ position: 'absolute', left: 0, zIndex: 100 }} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}>
-          {user.firstName} {user.lastName}
-        </Text>
-      </View>
+      <Header navigation={navigation} heading={`${user.firstName} ${user.lastName}`} />
       <ScrollView style={{ flex: 1 }} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       } showsVerticalScrollIndicator={false}>
